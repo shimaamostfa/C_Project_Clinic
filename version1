@@ -1,0 +1,238 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef unsigned char u8;
+typedef unsigned int u32;
+
+
+// Function prototypes
+void User (void);
+void Admin (void);
+struct Node* new_ID_with_malloc(u32 data);
+Patient* get_patient_info(u32 Id);
+void view_today_reservations(void);
+void view_patient_information(void);
+void Check_patient(void);
+void Add_patient(void);
+void Edit_patient(void);
+void Reserve_slot(void);
+void Cancel_reservation(void);
+void Exit(void);
+
+typedef struct Node
+{
+    u32 ID;
+    struct Node *next; // Pointer to the next node in the linked list
+}Node;
+Node* Head ;
+Node* Current ;
+
+typedef struct Patient
+{
+    u32 ID;
+    char Name[50];
+    u32 Age;
+    char Gender[10];
+}Patient;
+
+
+struct Node* new_ID_with_malloc(u32 data)
+{
+Node* new_node = (Node*)malloc(sizeof(Node)); // Allocate memory for the new node
+new_node->ID = data;
+new_node->next = NULL;
+return new_node;
+
+}
+
+Patient* get_patient_info(u32 Id)
+{
+    Node* temp = Head;
+    while (temp != NULL)
+    {
+        if (temp->ID == Id)
+        {
+            // Assuming we have a way to get patient info from the node
+            return (Patient*)temp->data;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+void view_patient_information(void)
+{
+    u32 Id;
+        printf("Please enter your ID: ");
+        scanf("%d", &Id);
+        Check_ID(Id);
+        if(Check_ID(Id) == 1)
+        {
+            // Code for viewing patient information
+            Patient* patient = get_patient_info(Id);
+            if (patient != NULL)
+            {
+                printf("Name: %s\n", patient->Name);
+                printf("Age: %d\n", patient->Age);
+                printf("Gender: %s\n", patient->Gender);
+            }
+        }
+}
+
+void view_today_reservations(void)
+{
+
+}
+
+int Check_ID(u32 Id)
+{
+    
+    Node* temp = Head;
+    Node* new_node = new_ID_with_malloc(Id);
+    while(temp !=NULL)
+    {
+    if(temp->ID == new_node->ID)
+        {
+            printf("Welcome, your ID %d is found\n", new_node->ID);
+        }
+        temp = temp->next;
+        return 1;
+    }
+    
+    printf("Your ID %d is not found, please contact the admin\n", new_node->ID);
+    free(new_node);
+    return 0;
+}
+void User (void)
+{
+    u8 choice;
+    printf("Welcome to the user mode\n");
+    printf("view patient informaton -->'P' OR view Today's Reservations -->'R'\n");
+    scanf(" %c", &choice);
+    switch (choice)
+    {
+    case 'P':
+        view_patient_information();
+        break;
+    case 'R':
+        view_today_reservations();
+        break;
+    default:
+        break;
+    }
+    
+
+}
+
+void Add_patient(void)
+{
+    printf("Enter your ID: ");
+    u32 Id;
+    scanf("%d", &Id);
+    if(Check_ID(Id) != 1)
+    {
+        // Code for adding patient information
+        printf("Enter patient name: ");
+        char name[50];
+        scanf("%s", name);
+        printf("Enter patient age: ");
+        u32 age;
+        scanf("%d", &age);
+        printf("Enter patient gender: ");
+        char gender[10];
+        scanf("%s", gender);
+
+        // Create a new patient and add it to the list
+        Patient* new_patient = (Patient*)malloc(sizeof(Patient));
+        new_patient->ID = Id;
+        strcpy(new_patient->Name, name);
+        new_patient->Age = age;
+        strcpy(new_patient->Gender, gender);
+
+        // Add the new patient to the linked list
+        Node* new_node = new_ID_with_malloc(Id);
+        new_node->data = new_patient;
+        new_node->next = Head;
+        Head = new_node;
+
+        printf("Patient added successfully\n");
+    }
+    else
+    {
+        printf("Cannot add patient, ID was registered before\n");
+    }
+}
+
+void Edit_patient(void)
+{
+
+}
+
+void Reserve_slot(void)
+{
+
+}
+
+void Cancel_reservation(void)
+{
+
+}
+
+void Exit(void)
+{
+    printf("Exiting the program...\n");
+    exit(0);
+}
+
+void Admin (void)
+{
+    u32 password;
+    printf("Welcome to the admin mode\n");
+    printf("Enter the password: ");
+    scanf("%d",&password);
+    int n = 0;
+    while (n<3)
+    {
+      if(password == 1234)
+    {
+        printf("Admin mode accessed\n");
+        Add_patient();
+        break;
+    }
+    else
+    {  
+        printf("Wrong password, please try again\n");
+    }
+    n++;
+    }
+
+}
+int main()
+{
+    printf("Welcome to the clinic\n");
+    char Mode;
+    printf("Please enter the mode (A --> Admin)/(U --> User)/(E --> Exit):");
+    scanf("%c",&Mode);
+    switch (Mode)
+    {
+    case 'A':
+        printf("Admin mode selected\n");
+        break;
+    case 'U':
+        printf("User mode selected\n");
+        User();
+        break;
+    case 'E':
+        printf("Exit mode selected\n");
+        break;
+    default:
+        break;
+    }
+
+
+
+
+
+
+    return 0;
+}
