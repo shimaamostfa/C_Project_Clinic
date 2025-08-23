@@ -2,10 +2,11 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define MAX_RESERVATIONS 5
 
 typedef unsigned char u8;
 typedef unsigned int u32;
+
+#define MAX_RESERVATIONS 5
 
 const char *TimeSlots[MAX_RESERVATIONS] = {
     "2:00 - 2:30 PM",
@@ -14,10 +15,7 @@ const char *TimeSlots[MAX_RESERVATIONS] = {
     "4:00 - 4:30 PM",
     "4:30 - 5:00 PM"
 };
-
 u32 Reservations[MAX_RESERVATIONS] = {0}; // 0 = available, ID = reserved
-
-
 
 
 typedef struct Node
@@ -31,24 +29,19 @@ typedef struct Node
 Node* Head ;
 Node* Current ;
 
-struct Node* new_Node_with_malloc(u32 data)
-{
-Node* new_node = (Node*)malloc(sizeof(Node)); // Allocate memory for the new node
-new_node->ID = data;
-new_node->next = NULL;
-return new_node;
 
-}
-
+// Function prototype
 int Check_ID(u32 Id);
 void view_patient_information(void);
 void view_today_reservations(void);
-void User (void);
 void Add_patient(void);
 void Edit_patient(void);
-void Admin (void);
 void Exit(void);
 void Reserve_slot(void);
+void view_available_slots(void);
+void Cancel_Reservation(void);
+void Admin (void);
+void User (void);
 
 int Check_ID(u32 Id)
 {
@@ -130,7 +123,6 @@ void Reserve_slot(void)
     }
 }
 
-
 void view_available_slots(void)
 {
     printf("Available slots:\n");
@@ -190,28 +182,6 @@ void Cancel_Reservation(void)
     {
         printf("This slot is already available.\n");
     }
-}
-
-
-void User (void)
-{
-    u8 choice;
-    printf("Welcome to the user mode\n");
-    printf("view patient informaton -->'P' OR view Today's Reservations -->'R'\n");
-    scanf(" %c", &choice);
-    switch (choice)
-    {
-    case 'P':
-        view_patient_information();
-        break;
-    case 'R':
-        view_today_reservations();
-        break;
-    default:
-        break;
-    }
-    
-
 }
 
 void Add_patient(void)
@@ -317,6 +287,27 @@ void Admin (void)
     }
     n++;
     }
+
+}
+
+void User (void)
+{
+    u8 choice;
+    printf("Welcome to the user mode\n");
+    printf("view patient informaton -->'P' OR view Today's Reservations -->'R'\n");
+    scanf(" %c", &choice);
+    switch (choice)
+    {
+    case 'P':
+        view_patient_information();
+        break;
+    case 'R':
+        view_today_reservations();
+        break;
+    default:
+        break;
+    }
+    
 
 }
 
